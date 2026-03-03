@@ -1,0 +1,135 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublished, createWithBase } from '../../lib/content';
+import { groupByYear, formatMonthDay, formatISODate } from '../../utils/format';
+
+export async function getStaticPaths() {
+  const [essays, fictions, nonfictions, bits] = await Promise.all([
+    getPublished('essay'),
+    getPublished('fiction'),
+    getPublished('nonfiction'),
+    getPublished('bits')
+  ]);
+  const all = [...essays, ...fictions, ...nonfictions, ...bits];
+
+  // Collect every unique prefix path from all categories arrays
+  const pathSet = new Set<string>();
+  for (const entry of all) {
+    const cats: string[] = (entry.data as any).categories ?? [];
+    for (let i = 1; i <= cats.length; i++) {
+      pathSet.add(cats.slice(0, i).join('/'));
+    }
+  }
+
+  return [...pathSet].map((catPath) => {
+    const slugParts = catPath.split('/');
+    const matched = all
+      .filter((e) => {
+        const cats: string[] = (e.data as any).categories ?? [];
+        return slugParts.every((part, i) => cats[i] === part);
+      })
+      .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+    // Direct children: entries whose categories[slugParts.length] exists
+    const childCount = new Map<string, number>();
+    for (const e of matched) {
+      const cats: string[] = (e.data as any).categories ?? [];
+      const child = cats[slugParts.length];
+      if (child) childCount.set(child, (childCount.get(child) ?? 0) + 1);
+    }
+
+    return {
+      params: { slug: catPath },
+      props: { slugParts, matched, childCount: Object.fromEntries(childCount) }
+    };
+  });
+}
+
+const base = import.meta.env.BASE_URL ?? '/';
+const withBase = createWithBase(base);
+
+const { slugParts, matched, childCount } = Astro.props as {
+  slugParts: string[];
+  matched: any[];
+  childCount: Record<string, number>;
+};
+
+const groups = groupByYear(matched, (e: any) => e.data.date);
+const children = Object.entries(childCount).sort((a, b) => b[1] - a[1]);
+
+// Build breadcrumb links
+const breadcrumbs = slugParts.map((part, i) => ({
+  label: part,
+  href: withBase(`/category/${slugParts.slice(0, i + 1).map(encodeURIComponent).join('/')}/`)
+}));
+
+// Resolve article href per collection
+function articleHref(entry: any): string {
+  const slug = entry.data.slug ?? entry.id;
+  const col = entry.collection;
+  if (col === 'essay') return withBase(`/archive/${slug}/`);
+  if (col === 'fiction') return withBase(`/fiction/${slug}/`);
+  if (col === 'nonfiction') return withBase(`/nonfiction/${slug}/`);
+  return withBase(`/bits/`);
+}
+---
+
+<BaseLayout title={`分类：${slugParts.join(' › ')}`}>
+  <div class="page-header">
+    <div class="page-heading">
+      <h1 class="page-title">
+        {breadcrumbs.map((bc, i) => (
+          <>
+            {i > 0 && <span style="opacity:0.4; margin: 0 0.3em;">›</span>}
+            {i < breadcrumbs.length - 1
+              ? <a href={bc.href}>{bc.label}</a>
+              : <span>{bc.label}</span>
+            }
+          </>
+        ))}
+      </h1>
+      <span class="page-subtitle">共 {matched.length} 篇</span>
+    </div>
+  </div>
+
+  {children.length > 0 && (
+    <div style="margin: 1rem 0 1.5rem;">
+      <div style="font-size: 0.85em; opacity: 0.6; margin-bottom: 0.5rem;">子分类</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+        {children.map(([child, count]) => (
+          <a
+            href={withBase(`/category/${[...slugParts, child].map(encodeURIComponent).join('/')}/`)}
+            class="tag"
+            style="text-decoration: none;"
+          >
+            {child} <span style="opacity:0.5;">({count})</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  )}
+
+  {groups.map((g: any) => (
+    <section>
+      <h2 class="archive-year">{g.year}</h2>
+      <div class="archive-list">
+        {g.list.map((entry: any) => (
+          <div class="archive-row">
+            <div class="archive-title">
+              <a href={articleHref(entry)}>{entry.data.title}</a>
+            </div>
+            <div class="archive-meta">
+              <div class="archive-date">
+                <span class="archive-date-md">{formatMonthDay(entry.data.date)}</span>
+                <span class="archive-date-full">{formatISODate(entry.data.date)}</span>
+              </div>
+              {entry.data.tags?.[0] && (
+                <div class="archive-tag">#{entry.data.tags[0]}</div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+</BaseLayout>

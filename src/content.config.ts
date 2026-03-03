@@ -14,7 +14,10 @@ const baseFields = {
   draft: z.boolean().default(false),
   archive: z.boolean().default(true),
   // Optional custom permalink. If present, it overrides the auto-generated id.
-  slug: slugRule.optional()
+  slug: slugRule.optional(),
+  // Migrated from hexo
+  categories: z.array(z.string()).default([]),
+  updated: z.coerce.date().optional()
 };
 
 const bitsImage = z.object({
@@ -51,7 +54,11 @@ const bits = defineCollection({
 
     // Optional media for card display.
     images: z.array(bitsImage).optional(),
-    author: bitsAuthor.optional()
+    author: bitsAuthor.optional(),
+
+    // Migrated from hexo
+    categories: z.array(z.string()).default([]),
+    updated: z.coerce.date().optional()
   })
 });
 
@@ -66,4 +73,22 @@ const memo = defineCollection({
   })
 });
 
-export const collections = { essay, bits, memo };
+const fiction = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/fiction' }),
+  schema: z.object({
+    ...baseFields,
+    cover: z.string().optional(),
+    badge: z.string().optional()
+  })
+});
+
+const nonfiction = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/nonfiction' }),
+  schema: z.object({
+    ...baseFields,
+    cover: z.string().optional(),
+    badge: z.string().optional()
+  })
+});
+
+export const collections = { essay, bits, memo, fiction, nonfiction };

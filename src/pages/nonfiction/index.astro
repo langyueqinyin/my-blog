@@ -1,0 +1,80 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import EssayCard from '../../components/EssayCard.astro';
+import { createWithBase, getPageSlice, getTotalPages, getPublished } from '../../lib/content';
+import { getListExcerpt } from '../../utils/excerpt';
+import { PAGE_SIZE_ESSAY } from '../../../site.config.mjs';
+
+const base = import.meta.env.BASE_URL ?? '/';
+const withBase = createWithBase(base);
+const allEntries = await getPublished('nonfiction', {
+  orderBy: (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+});
+const totalPages = getTotalPages(allEntries.length, PAGE_SIZE_ESSAY);
+const currentPage = 1;
+const pageEntries = getPageSlice(allEntries, currentPage, PAGE_SIZE_ESSAY);
+const showPagination = totalPages > 1;
+const nextHref = currentPage < totalPages ? withBase(`/nonfiction/page/${currentPage + 1}/`) : null;
+---
+
+<BaseLayout title="非虚构 / Non-Fiction" bodyClass="essay-page">
+  <div class="page-header page-header--essay page-header--with-search">
+    <div class="page-heading">
+      <h1 class="page-title">非虚构 / Non-Fiction</h1>
+      <span class="page-subtitle">共 {allEntries.length} 篇</span>
+    </div>
+    <div class="page-actions">
+      <div class="entry-search" data-entry-search data-index-url={withBase('/nonfiction/index.json')}>
+        <div class="entry-search-panel" data-entry-search-panel aria-hidden="true">
+          <input
+            data-entry-search-input
+            type="search"
+            placeholder="搜索：标题 / 摘要 / 标签"
+            autocomplete="off"
+            aria-label="搜索非虚构"
+          />
+        </div>
+        <button
+          class="entry-search-toggle"
+          data-entry-search-toggle
+          type="button"
+          aria-label="搜索非虚构"
+          title="搜索"
+          aria-expanded="false"
+        >
+          <Icon name="search" class="icon" />
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="entry-status" data-entry-search-status role="status" aria-live="polite"></div>
+
+  <div class="list">
+    {pageEntries.map((e) => (
+      <EssayCard
+        href={withBase(`/nonfiction/${e.data.slug ?? e.id}/`)}
+        slug={e.data.slug ?? e.id}
+        title={e.data.title}
+        excerpt={getListExcerpt(e)}
+        date={e.data.date}
+        tag={e.data.tags?.[0]}
+        badge={e.data.badge}
+      />
+    ))}
+  </div>
+
+  {showPagination && (
+    <nav class="pagination" aria-label="非虚构分页">
+      <div class="pagination__inner">
+        {nextHref ? (
+          <a class="pagination__link pagination__link--next" rel="next" href={nextHref}>下一页</a>
+        ) : null}
+      </div>
+    </nav>
+  )}
+
+  <script>
+    import '../../scripts/entry-search.ts';
+  </script>
+</BaseLayout>

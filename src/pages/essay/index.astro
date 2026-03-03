@@ -17,11 +17,11 @@ const prevHref = null;
 const nextHref = currentPage < totalPages ? withBase(`/essay/page/${currentPage + 1}/`) : null;
 ---
 
-<BaseLayout title="随笔" bodyClass="essay-page">
+<BaseLayout title="同人作品 / Fan Fiction" bodyClass="essay-page">
   <div class="page-header page-header--essay page-header--with-search">
     <div class="page-heading">
-      <h1 class="page-title">随笔</h1>
-      <span class="page-subtitle">随笔与杂记，共 {visibleEssays.length} 篇 · <a href={withBase('/essay/rss.xml')}>RSS</a></span>
+      <h1 class="page-title">同人作品 / Fan Fiction</h1>
+      <span class="page-subtitle">共 {visibleEssays.length} 篇 · <a href={withBase('/essay/rss.xml')}>RSS</a></span>
     </div>
     <div class="page-actions">
       <div class="entry-search" data-entry-search data-index-url={withBase('/essay/index.json')}>

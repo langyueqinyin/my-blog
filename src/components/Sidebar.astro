@@ -10,14 +10,16 @@ const withBase = createWithBase(base);
 const homeHref = withBase('/');
 
 const nav = [
-  { label: '随笔', href: withBase('/essay/') },
-  { label: '絮语', href: withBase('/bits/') },
-  { label: '小记', href: withBase('/memo/') },
-  { label: '归档', href: withBase('/archive/') },
-  { label: '关于', href: withBase('/about/') }
+  { label: '同人作品 / Fan Fiction', href: withBase('/essay/') },
+  { label: '原创作品 / Fiction',      href: withBase('/fiction/') },
+  { label: '非虚构 / Non-Fiction',    href: withBase('/nonfiction/') },
+  { label: '其他 / Misc',             href: withBase('/bits/') },
+  { label: '分类',                     href: withBase('/category/') },
+  { label: '归档',                     href: withBase('/archive/') },
+  { label: '关于',                     href: withBase('/about/') }
 ];
 
-const quote = 'A minimal Astro theme\nfor essays, notes, and docs.\nDesigned for reading,\nopen-source.';
+const quote = 'Stories from a Storyteller';
 ---
 
 <aside class="sidebar">

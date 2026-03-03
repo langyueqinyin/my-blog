@@ -11,11 +11,11 @@ if (!hasSiteUrl && process.env.NODE_ENV === 'production') {
 
 export const site = {
   url: hasSiteUrl ? siteUrl : fallbackSiteUrl,
-  title: 'Astro Themes by Whono',
-  brandTitle: 'Whono',
-  author: 'Whono',
+  title: '朗月琴音的文字存档',
+  brandTitle: '朗月琴音的文字存档',
+  author: '朗月琴音',
   authorAvatar: 'author/avatar.webp',
-  description: '一个 Astro 主题的展示站：轻量、可维护、可复用。'
+  description: '从Lofter到Notion，我这些年来写过的各式文字、故事，塑造过的角色与人生，于此存档。'
 };
 
 export const PAGE_SIZE_ARCHIVE = 12;

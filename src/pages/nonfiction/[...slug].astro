@@ -1,0 +1,35 @@
+---
+import { render } from 'astro:content';
+import { getPublished, isReservedSlug, createWithBase } from '../../lib/content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+
+export async function getStaticPaths() {
+  const base = import.meta.env.BASE_URL ?? '/';
+  const withBase = createWithBase(base);
+  const entries = await getPublished('nonfiction', {
+    orderBy: (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+  });
+  const visible = entries.filter((e) => !isReservedSlug(e.data.slug ?? e.id));
+  return visible.map((entry, index) => {
+    const prevEntry = visible.at(index - 1);
+    const nextEntry = visible.at(index + 1);
+    return {
+      params: { slug: entry.data.slug ?? entry.id },
+      props: {
+        entry,
+        prev: prevEntry
+          ? { href: withBase(`/nonfiction/${prevEntry.data.slug ?? prevEntry.id}/`), title: prevEntry.data.title }
+          : null,
+        next: nextEntry
+          ? { href: withBase(`/nonfiction/${nextEntry.data.slug ?? nextEntry.id}/`), title: nextEntry.data.title }
+          : null
+      }
+    };
+  });
+}
+
+const { entry, prev, next } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<ArticleLayout entry={entry} Content={Content} prev={prev} next={next} />

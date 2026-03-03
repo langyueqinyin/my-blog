@@ -84,7 +84,7 @@
     background: var(--panel);
     color: var(--text);
     border: 1px solid var(--border);
-    font-family: "LXGW WenKai Lite", "Kaiti SC", "STKaiti", serif;
+    font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
     font-size: 12px;
     line-height: 1;
     white-space: nowrap;
@@ -227,7 +227,7 @@
   -webkit-line-clamp: 3;
   line-clamp: 3;
   overflow: hidden;
-  font-family: "LXGW WenKai Lite", "Kaiti SC", "STKaiti", serif;
+  font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
 }
 
 .badge {
@@ -416,7 +416,7 @@
   background: var(--code-content-bg);
   color: var(--text);
   font-size: 13px;
-  font-family: "LXGW WenKai Lite", "Kaiti SC", "STKaiti", serif;
+  font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
 }
 
 .pagination__link:hover,

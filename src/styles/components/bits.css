@@ -264,7 +264,7 @@
   border-radius: 999px;
   font-size: 14px;
   font-weight: 600;
-  font-family: "LXGW WenKai Lite", "Kaiti SC", "STKaiti", serif;
+  font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
   color: #fff;
   background: var(--overlay-60);
   letter-spacing: 0.2px;
@@ -528,7 +528,7 @@
   border-radius: 12px;
   background: var(--bg);
   color: var(--text);
-  font-family: "LXGW WenKai Lite", "Kaiti SC", "STKaiti", serif;
+  font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
   --bits-focus: var(--muted);
   padding: 0;
 }

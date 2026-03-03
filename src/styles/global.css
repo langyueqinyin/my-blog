@@ -10,32 +10,6 @@
 @import "./components/lightbox.css";
 @import "./components/code-block.css";
 
-@font-face {
-  font-family: "LXGW WenKai Lite";
-  src: url("/fonts/lxgw-wenkai-lite-latin.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-  unicode-range: U+0000-00FF, U+2000-206F, U+3000-303F, U+FF00-FFEF;
-}
-
-@font-face {
-  font-family: "LXGW WenKai Lite";
-  src: url("/fonts/lxgw-wenkai-lite-cjk-common.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-  unicode-range: U+4E00-9FFF;
-}
-
-@font-face {
-  font-family: "LXGW WenKai Lite";
-  src: url("/fonts/lxgw-wenkai-lite-cjk-ext.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-  unicode-range: U+3400-4DBF, U+20000-2A6DF;
-}
 
 @font-face {
   font-family: "Noto Serif SC";
@@ -174,7 +148,7 @@ time,
 .archive-date,
 .bit-meta,
 .meta-line {
-  font-family: "LXGW WenKai Lite", "Kaiti SC", "STKaiti", serif;
+  font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
 }
 
 .page-subtitle,
@@ -186,7 +160,7 @@ time,
 .prose blockquote p,
 cite,
 q {
-  font-family: "LXGW WenKai Lite", "Kaiti SC", "STKaiti", serif;
+  font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
 }
 
 pre,
@@ -303,7 +277,7 @@ hr {
 }
 
 .intro--serif a {
-  font-family: "LXGW WenKai Lite", "Kaiti SC", "STKaiti", serif;
+  font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
 }
 
 .section-title {
@@ -332,7 +306,7 @@ hr {
 
 .about-intro-line {
   margin: 30px 0 0;
-  font-family: "LXGW WenKai Lite", "Kaiti SC", "STKaiti", serif;
+  font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
 }
 
 .about-section-title {
@@ -367,7 +341,7 @@ hr {
   font-size: 16px;
   line-height: 1.75;
   font-weight: 400;
-  font-family: "LXGW WenKai Lite", "Kaiti SC", "STKaiti", serif;
+  font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
 }
 
 .qa-icon {
@@ -389,7 +363,7 @@ hr {
   color: var(--muted);
   font-size: 16px;
   line-height: 1.75;
-  font-family: "LXGW WenKai Lite", "Kaiti SC", "STKaiti", serif;
+  font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
 }
 
 .contact-block {
@@ -401,7 +375,7 @@ hr {
   color: var(--text);
   font-size: 16px;
   line-height: 1.75;
-  font-family: "LXGW WenKai Lite", "Kaiti SC", "STKaiti", serif;
+  font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
 }
 
 .contact-list {
@@ -421,7 +395,7 @@ hr {
   color: var(--text);
   font-size: 16px;
   line-height: 1.75;
-  font-family: "LXGW WenKai Lite", "Kaiti SC", "STKaiti", serif;
+  font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
 }
 
 .contact-link-head {

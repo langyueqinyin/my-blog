@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublished, createWithBase } from '../../lib/content';
+
+const base = import.meta.env.BASE_URL ?? '/';
+const withBase = createWithBase(base);
+
+// Gather all entries from every collection that carries categories
+const [essays, fictions, nonfictions, bits] = await Promise.all([
+  getPublished('essay'),
+  getPublished('fiction'),
+  getPublished('nonfiction'),
+  getPublished('bits')
+]);
+const all = [...essays, ...fictions, ...nonfictions, ...bits];
+
+// Build a two-level map: top → { count, children: { child → count } }
+type Node = { count: number; children: Map<string, number> };
+const tree = new Map<string, Node>();
+
+for (const entry of all) {
+  const cats: string[] = (entry.data as any).categories ?? [];
+  if (cats.length === 0) continue;
+  const top = cats[0];
+  if (!tree.has(top)) tree.set(top, { count: 0, children: new Map() });
+  const node = tree.get(top)!;
+  node.count++;
+  if (cats[1]) {
+    node.children.set(cats[1], (node.children.get(cats[1]) ?? 0) + 1);
+  }
+}
+
+const sorted = [...tree.entries()].sort((a, b) => b[1].count - a[1].count);
+---
+
+<BaseLayout title="分类">
+  <div class="page-header">
+    <div class="page-heading">
+      <h1 class="page-title">分类</h1>
+      <span class="page-subtitle">共 {sorted.length} 个顶级分类</span>
+    </div>
+  </div>
+
+  <div class="archive-list" style="margin-top: 1.5rem;">
+    {sorted.map(([top, node]) => (
+      <div style="margin-bottom: 1.5rem;">
+        <div class="archive-row">
+          <div class="archive-title">
+            <a href={withBase(`/category/${encodeURIComponent(top)}/`)}>{top}</a>
+          </div>
+          <div class="archive-meta">
+            <span class="archive-date-md">{node.count} 篇</span>
+          </div>
+        </div>
+        {node.children.size > 0 && (
+          <div style="padding-left: 1.5rem; margin-top: 0.25rem;">
+            {[...node.children.entries()]
+              .sort((a, b) => b[1] - a[1])
+              .map(([child, count]) => (
+                <div class="archive-row" style="opacity: 0.85;">
+                  <div class="archive-title">
+                    <a href={withBase(`/category/${encodeURIComponent(top)}/${encodeURIComponent(child)}/`)}>{child}</a>
+                  </div>
+                  <div class="archive-meta">
+                    <span class="archive-date-md">{count} 篇</span>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+</BaseLayout>
