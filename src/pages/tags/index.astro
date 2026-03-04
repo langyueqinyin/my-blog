@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublished, createWithBase } from '../../lib/content';
+
+const base = import.meta.env.BASE_URL ?? '/';
+const withBase = createWithBase(base);
+
+const [essays, fictions, nonfictions, bits] = await Promise.all([
+  getPublished('essay'),
+  getPublished('fiction'),
+  getPublished('nonfiction'),
+  getPublished('bits'),
+]);
+const all = [...essays, ...fictions, ...nonfictions, ...bits];
+
+// Count occurrences of each tag
+const tagCount = new Map<string, number>();
+for (const entry of all) {
+  for (const tag of (entry.data.tags ?? [])) {
+    if (tag) tagCount.set(tag, (tagCount.get(tag) ?? 0) + 1);
+  }
+}
+
+const sorted = [...tagCount.entries()].sort((a, b) => b[1] - a[1]);
+---
+
+<BaseLayout title="标签">
+  <div class="page-header">
+    <div class="page-heading">
+      <h1 class="page-title">标签</h1>
+      <span class="page-subtitle">共 {sorted.length} 个标签</span>
+    </div>
+  </div>
+
+  <div class="archive-list" style="margin-top: 1.5rem;">
+    {sorted.map(([tag, count]) => (
+      <div class="archive-row">
+        <div class="archive-title">
+          <a href={withBase(`/tags/${encodeURIComponent(tag)}/`)}>#{tag}</a>
+        </div>
+        <div class="archive-meta">
+          <span class="archive-date-md">{count} 篇</span>
+        </div>
+      </div>
+    ))}
+  </div>
+</BaseLayout>

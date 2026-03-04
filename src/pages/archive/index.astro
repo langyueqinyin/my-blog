@@ -74,7 +74,7 @@ const nextHref = currentPage < totalPages ? withBase(`/archive/page/${currentPag
                 <span class="archive-date-full">{formatISODate(entry.data.date)}</span>
               </div>
               {tag ? (
-                <div class="archive-tag">#{tag}</div>
+                <div class="archive-tag"><a href={withBase(`/tags/${encodeURIComponent(tag)}/`)}>#{tag}</a></div>
               ) : null}
             </div>
           </div>

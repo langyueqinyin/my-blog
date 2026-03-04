@@ -55,7 +55,7 @@ const description = getMetaDescription(entry);
     <div class="meta-line">
       发布于：{formatISODate(entry.data.date)}
       {typeLabel ? <> · <span class="tag">{typeLabel}</span></> : null}
-      {firstTag ? <> · <span class="tag">#{firstTag}</span></> : null}
+      {firstTag ? <> · <a class="tag" href={withBase(`/tags/${encodeURIComponent(firstTag)}/`)}>#{firstTag}</a></> : null}
     </div>
     {cats.length > 0 && (
       <div class="meta-line">

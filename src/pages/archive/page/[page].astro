@@ -91,7 +91,7 @@ const pageTitle = `归档 · 第 ${currentPage} 页`;
                 <span class="archive-date-full">{formatISODate(entry.data.date)}</span>
               </div>
               {tag ? (
-                <div class="archive-tag">#{tag}</div>
+                <div class="archive-tag"><a href={withBase(`/tags/${encodeURIComponent(tag)}/`)}>#{tag}</a></div>
               ) : null}
             </div>
           </div>

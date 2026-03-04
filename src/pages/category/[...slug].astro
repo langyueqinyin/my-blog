@@ -124,7 +124,7 @@ function articleHref(entry: any): string {
                 <span class="archive-date-full">{formatISODate(entry.data.date)}</span>
               </div>
               {entry.data.tags?.[0] && (
-                <div class="archive-tag">#{entry.data.tags[0]}</div>
+                <div class="archive-tag"><a href={withBase(`/tags/${encodeURIComponent(entry.data.tags[0])}/`)}>#{entry.data.tags[0]}</a></div>
               )}
             </div>
           </div>

@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublished, createWithBase } from '../../lib/content';
+import { groupByYear, formatMonthDay, formatISODate } from '../../utils/format';
+
+export async function getStaticPaths() {
+  const [essays, fictions, nonfictions, bits] = await Promise.all([
+    getPublished('essay'),
+    getPublished('fiction'),
+    getPublished('nonfiction'),
+    getPublished('bits'),
+  ]);
+  const all = [...essays, ...fictions, ...nonfictions, ...bits];
+
+  // Collect all unique tags
+  const tagMap = new Map<string, typeof all>();
+  for (const entry of all) {
+    for (const tag of (entry.data.tags ?? [])) {
+      if (!tag) continue;
+      if (!tagMap.has(tag)) tagMap.set(tag, []);
+      tagMap.get(tag)!.push(entry);
+    }
+  }
+
+  return [...tagMap.entries()].map(([tag, entries]) => {
+    const sorted = entries.slice().sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+    return { params: { tag }, props: { tag, entries: sorted } };
+  });
+}
+
+const base = import.meta.env.BASE_URL ?? '/';
+const withBase = createWithBase(base);
+
+const { tag, entries } = Astro.props as { tag: string; entries: any[] };
+const groups = groupByYear(entries, (e: any) => e.data.date);
+
+function articleHref(entry: any): string {
+  const slug = entry.data.slug ?? entry.id;
+  const col = entry.collection;
+  if (col === 'essay')      return withBase(`/archive/${slug}/`);
+  if (col === 'fiction')    return withBase(`/fiction/${slug}/`);
+  if (col === 'nonfiction') return withBase(`/nonfiction/${slug}/`);
+  return withBase('/bits/');
+}
+---
+
+<BaseLayout title={`标签：#${tag}`}>
+  <div class="page-header">
+    <div class="page-heading">
+      <h1 class="page-title">#{tag}</h1>
+      <span class="page-subtitle">共 {entries.length} 篇</span>
+    </div>
+  </div>
+
+  {groups.map((g: any) => (
+    <section>
+      <h2 class="archive-year">{g.year}</h2>
+      <div class="archive-list">
+        {g.list.map((entry: any) => (
+          <div class="archive-row">
+            <div class="archive-title">
+              <a href={articleHref(entry)}>{entry.data.title}</a>
+            </div>
+            <div class="archive-meta">
+              <div class="archive-date">
+                <span class="archive-date-md">{formatMonthDay(entry.data.date)}</span>
+                <span class="archive-date-full">{formatISODate(entry.data.date)}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+</BaseLayout>
