@@ -1,7 +1,7 @@
 ---
 title: "安东宣传"
 description: "写于2019年8月1日，《爱你，安东》上映之际，记参与纪录片助理剪辑的一年。"
-date: 2026-10-27T18:21:00
+date: 2019-08-20
 updated: 2026-10-27T18:21:00
 categories: ["Non-fiction", "Anton"]
 tags: ["Anton", "安东·尤金", "爱你，安东", "纪录片"]
